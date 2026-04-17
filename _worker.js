@@ -526,293 +526,730 @@ async function KV(request, env, txt = 'ADD.txt', guest) {
 		}
 
 		const html = `
-			<!DOCTYPE html>
-			<html>
-				<head>
-					<title>${FileName} 订阅编辑</title>
-					<meta charset="utf-8">
-					<meta name="viewport" content="width=device-width, initial-scale=1">
-					<style>
-						body {
-							margin: 0;
-							padding: 15px; /* 调整padding */
-							box-sizing: border-box;
-							font-size: 13px; /* 设置全局字体大小 */
-						}
-						.editor-container {
-							width: 100%;
-							max-width: 100%;
-							margin: 0 auto;
-						}
-						.editor {
-							width: 100%;
-							height: 300px; /* 调整高度 */
-							margin: 15px 0; /* 调整margin */
-							padding: 10px; /* 调整padding */
-							box-sizing: border-box;
-							border: 1px solid #ccc;
-							border-radius: 4px;
-							font-size: 13px;
-							line-height: 1.5;
-							overflow-y: auto;
-							resize: none;
-						}
-						.save-container {
-							margin-top: 8px; /* 调整margin */
-							display: flex;
-							align-items: center;
-							gap: 10px; /* 调整gap */
-						}
-						.save-btn, .back-btn {
-							padding: 6px 15px; /* 调整padding */
-							color: white;
-							border: none;
-							border-radius: 4px;
-							cursor: pointer;
-						}
-						.save-btn {
-							background: #4CAF50;
-						}
-						.save-btn:hover {
-							background: #45a049;
-						}
-						.back-btn {
-							background: #666;
-						}
-						.back-btn:hover {
-							background: #555;
-						}
-						.save-status {
-							color: #666;
-						}
-					</style>
-					<script src="https://cdn.jsdelivr.net/npm/@keeex/qrcodejs-kx@1.0.2/qrcode.min.js"></script>
-				</head>
-				<body>
-					################################################################<br>
-					Subscribe / sub 订阅地址, 点击链接自动 <strong>复制订阅链接</strong> 并 <strong>生成订阅二维码</strong> <br>
-					---------------------------------------------------------------<br>
-					自适应订阅地址:<br>
-					<a href="javascript:void(0)" onclick="copyToClipboard('https://${url.hostname}/${mytoken}?sub','qrcode_0')" style="color:blue;text-decoration:underline;cursor:pointer;">https://${url.hostname}/${mytoken}</a><br>
-					<div id="qrcode_0" style="margin: 10px 10px 10px 10px;"></div>
-					Base64订阅地址:<br>
-					<a href="javascript:void(0)" onclick="copyToClipboard('https://${url.hostname}/${mytoken}?b64','qrcode_1')" style="color:blue;text-decoration:underline;cursor:pointer;">https://${url.hostname}/${mytoken}?b64</a><br>
-					<div id="qrcode_1" style="margin: 10px 10px 10px 10px;"></div>
-					clash订阅地址:<br>
-					<a href="javascript:void(0)" onclick="copyToClipboard('https://${url.hostname}/${mytoken}?clash','qrcode_2')" style="color:blue;text-decoration:underline;cursor:pointer;">https://${url.hostname}/${mytoken}?clash</a><br>
-					<div id="qrcode_2" style="margin: 10px 10px 10px 10px;"></div>
-					singbox订阅地址:<br>
-					<a href="javascript:void(0)" onclick="copyToClipboard('https://${url.hostname}/${mytoken}?sb','qrcode_3')" style="color:blue;text-decoration:underline;cursor:pointer;">https://${url.hostname}/${mytoken}?sb</a><br>
-					<div id="qrcode_3" style="margin: 10px 10px 10px 10px;"></div>
-					surge订阅地址:<br>
-					<a href="javascript:void(0)" onclick="copyToClipboard('https://${url.hostname}/${mytoken}?surge','qrcode_4')" style="color:blue;text-decoration:underline;cursor:pointer;">https://${url.hostname}/${mytoken}?surge</a><br>
-					<div id="qrcode_4" style="margin: 10px 10px 10px 10px;"></div>
-					loon订阅地址:<br>
-					<a href="javascript:void(0)" onclick="copyToClipboard('https://${url.hostname}/${mytoken}?loon','qrcode_5')" style="color:blue;text-decoration:underline;cursor:pointer;">https://${url.hostname}/${mytoken}?loon</a><br>
-					<div id="qrcode_5" style="margin: 10px 10px 10px 10px;"></div>
-					&nbsp;&nbsp;<strong><a href="javascript:void(0);" id="noticeToggle" onclick="toggleNotice()">查看访客订阅∨</a></strong><br>
-					<div id="noticeContent" class="notice-content" style="display: none;">
-						---------------------------------------------------------------<br>
-						访客订阅只能使用订阅功能，无法查看配置页！<br>
-						GUEST（访客订阅TOKEN）: <strong>${guest}</strong><br>
-						---------------------------------------------------------------<br>
-						自适应订阅地址:<br>
-						<a href="javascript:void(0)" onclick="copyToClipboard('https://${url.hostname}/sub?token=${guest}','guest_0')" style="color:blue;text-decoration:underline;cursor:pointer;">https://${url.hostname}/sub?token=${guest}</a><br>
-						<div id="guest_0" style="margin: 10px 10px 10px 10px;"></div>
-						Base64订阅地址:<br>
-						<a href="javascript:void(0)" onclick="copyToClipboard('https://${url.hostname}/sub?token=${guest}&b64','guest_1')" style="color:blue;text-decoration:underline;cursor:pointer;">https://${url.hostname}/sub?token=${guest}&b64</a><br>
-						<div id="guest_1" style="margin: 10px 10px 10px 10px;"></div>
-						clash订阅地址:<br>
-						<a href="javascript:void(0)" onclick="copyToClipboard('https://${url.hostname}/sub?token=${guest}&clash','guest_2')" style="color:blue;text-decoration:underline;cursor:pointer;">https://${url.hostname}/sub?token=${guest}&clash</a><br>
-						<div id="guest_2" style="margin: 10px 10px 10px 10px;"></div>
-						singbox订阅地址:<br>
-						<a href="javascript:void(0)" onclick="copyToClipboard('https://${url.hostname}/sub?token=${guest}&sb','guest_3')" style="color:blue;text-decoration:underline;cursor:pointer;">https://${url.hostname}/sub?token=${guest}&sb</a><br>
-						<div id="guest_3" style="margin: 10px 10px 10px 10px;"></div>
-						surge订阅地址:<br>
-						<a href="javascript:void(0)" onclick="copyToClipboard('https://${url.hostname}/sub?token=${guest}&surge','guest_4')" style="color:blue;text-decoration:underline;cursor:pointer;">https://${url.hostname}/sub?token=${guest}&surge</a><br>
-						<div id="guest_4" style="margin: 10px 10px 10px 10px;"></div>
-						loon订阅地址:<br>
-						<a href="javascript:void(0)" onclick="copyToClipboard('https://${url.hostname}/sub?token=${guest}&loon','guest_5')" style="color:blue;text-decoration:underline;cursor:pointer;">https://${url.hostname}/sub?token=${guest}&loon</a><br>
-						<div id="guest_5" style="margin: 10px 10px 10px 10px;"></div>
-					</div>
-					---------------------------------------------------------------<br>
-					################################################################<br>
-					订阅转换配置<br>
-					---------------------------------------------------------------<br>
-					SUBAPI（订阅转换后端）: <strong>${subProtocol}://${subConverter}</strong><br>
-					SUBCONFIG（订阅转换配置文件）: <strong>${subConfig}</strong><br>
-					---------------------------------------------------------------<br>
-					################################################################<br>
-					${FileName} 汇聚订阅编辑: 
-					<div class="editor-container">
-						${hasKV ? `
-						<textarea class="editor" 
-							placeholder="${decodeURIComponent(atob('TElOSyVFNyVBNCVCQSVFNCVCRSU4QiVFRiVCQyU4OCVFNCVCOCU4MCVFOCVBMSU4QyVFNCVCOCU4MCVFNCVCOCVBQSVFOCU4QSU4MiVFNyU4MiVCOSVFOSU5MyVCRSVFNiU4RSVBNSVFNSU4RCVCMyVFNSU4RiVBRiVFRiVCQyU4OSVFRiVCQyU5QQp2bGVzcyUzQSUyRiUyRjI0NmFhNzk1LTA2MzctNGY0Yy04ZjY0LTJjOGZiMjRjMWJhZCU0MDEyNy4wLjAuMSUzQTEyMzQlM0ZlbmNyeXB0aW9uJTNEbm9uZSUyNnNlY3VyaXR5JTNEdGxzJTI2c25pJTNEVEcuQ01MaXVzc3NzLmxvc2V5b3VyaXAuY29tJTI2YWxsb3dJbnNlY3VyZSUzRDElMjZ0eXBlJTNEd3MlMjZob3N0JTNEVEcuQ01MaXVzc3NzLmxvc2V5b3VyaXAuY29tJTI2cGF0aCUzRCUyNTJGJTI1M0ZlZCUyNTNEMjU2MCUyM0NGbmF0CnRyb2phbiUzQSUyRiUyRmFhNmRkZDJmLWQxY2YtNGE1Mi1iYTFiLTI2NDBjNDFhNzg1NiU0MDIxOC4xOTAuMjMwLjIwNyUzQTQxMjg4JTNGc2VjdXJpdHklM0R0bHMlMjZzbmklM0RoazEyLmJpbGliaWxpLmNvbSUyNmFsbG93SW5zZWN1cmUlM0QxJTI2dHlwZSUzRHRjcCUyNmhlYWRlclR5cGUlM0Rub25lJTIzSEsKc3MlM0ElMkYlMkZZMmhoWTJoaE1qQXRhV1YwWmkxd2IyeDVNVE13TlRveVJYUlFjVzQyU0ZscVZVNWpTRzlvVEdaVmNFWlJkMjVtYWtORFVUVnRhREZ0U21SRlRVTkNkV04xVjFvNVVERjFaR3RTUzBodVZuaDFielUxYXpGTFdIb3lSbTgyYW5KbmRERTRWelkyYjNCMGVURmxOR0p0TVdwNlprTm1RbUklMjUzRCU0MDg0LjE5LjMxLjYzJTNBNTA4NDElMjNERQoKCiVFOCVBRSVBMiVFOSU5OCU4NSVFOSU5MyVCRSVFNiU4RSVBNSVFNyVBNCVCQSVFNCVCRSU4QiVFRiVCQyU4OCVFNCVCOCU4MCVFOCVBMSU4QyVFNCVCOCU4MCVFNiU5RCVBMSVFOCVBRSVBMiVFOSU5OCU4NSVFOSU5MyVCRSVFNiU4RSVBNSVFNSU4RCVCMyVFNSU4RiVBRiVFRiVCQyU4OSVFRiVCQyU5QQpodHRwcyUzQSUyRiUyRnN1Yi54Zi5mcmVlLmhyJTJGYXV0bw=='))}"
-							id="content">${content}</textarea>
-						<div class="save-container">
-							<button class="save-btn" onclick="saveContent(this)">保存</button>
-							<span class="save-status" id="saveStatus"></span>
-						</div>
-						` : '<p>请绑定 <strong>变量名称</strong> 为 <strong>KV</strong> 的KV命名空间</p>'}
-					</div>
-					<br>
-					################################################################<br>
-					${decodeURIComponent(atob('dGVsZWdyYW0lMjAlRTQlQkElQTQlRTYlQjUlODElRTclQkUlQTQlMjAlRTYlOEElODAlRTYlOUMlQUYlRTUlQTQlQTclRTQlQkQlQUMlN0UlRTUlOUMlQTglRTclQkElQkYlRTUlOEYlOTElRTclODklOEMhJTNDYnIlM0UKJTNDYSUyMGhyZWYlM0QlMjdodHRwcyUzQSUyRiUyRnQubWUlMkZDTUxpdXNzc3MlMjclM0VodHRwcyUzQSUyRiUyRnQubWUlMkZDTUxpdXNzc3MlM0MlMkZhJTNFJTNDYnIlM0UKLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tJTNDYnIlM0UKZ2l0aHViJTIwJUU5JUExJUI5JUU3JTlCJUFFJUU1JTlDJUIwJUU1JTlEJTgwJTIwU3RhciFTdGFyIVN0YXIhISElM0NiciUzRQolM0NhJTIwaHJlZiUzRCUyN2h0dHBzJTNBJTJGJTJGZ2l0aHViLmNvbSUyRmNtbGl1JTJGQ0YtV29ya2Vycy1TVUIlMjclM0VodHRwcyUzQSUyRiUyRmdpdGh1Yi5jb20lMkZjbWxpdSUyRkNGLVdvcmtlcnMtU1VCJTNDJTJGYSUzRSUzQ2JyJTNFCi0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLSUzQ2JyJTNFCiUyMyUyMyUyMyUyMyUyMyUyMyUyMyUyMyUyMyUyMyUyMyUyMyUyMyUyMyUyMyUyMyUyMyUyMyUyMyUyMyUyMyUyMyUyMyUyMyUyMyUyMyUyMyUyMyUyMyUyMyUyMyUyMyUyMyUyMyUyMyUyMyUyMyUyMyUyMyUyMyUyMyUyMyUyMyUyMyUyMyUyMyUyMyUyMyUyMyUyMyUyMyUyMyUyMyUyMyUyMyUyMyUyMyUyMyUyMyUyMyUyMyUyMyUyMyUyMw=='))}
-					<br><br>UA: <strong>${request.headers.get('User-Agent')}</strong>
-					<script>
-					function copyToClipboard(text, qrcode) {
-						navigator.clipboard.writeText(text).then(() => {
-							alert('已复制到剪贴板');
-						}).catch(err => {
-							console.error('复制失败:', err);
-						});
-						const qrcodeDiv = document.getElementById(qrcode);
-						qrcodeDiv.innerHTML = '';
-						new QRCode(qrcodeDiv, {
-							text: text,
-							width: 220, // 调整宽度
-							height: 220, // 调整高度
-							colorDark: "#000000", // 二维码颜色
-							colorLight: "#ffffff", // 背景颜色
-							correctLevel: QRCode.CorrectLevel.Q, // 设置纠错级别
-							scale: 1 // 调整像素颗粒度
-						});
-					}
-						
-					if (document.querySelector('.editor')) {
-						let timer;
-						const textarea = document.getElementById('content');
-						const originalContent = textarea.value;
-		
-						function goBack() {
-							const currentUrl = window.location.href;
-							const parentUrl = currentUrl.substring(0, currentUrl.lastIndexOf('/'));
-							window.location.href = parentUrl;
-						}
-		
-						function replaceFullwidthColon() {
-							const text = textarea.value;
-							textarea.value = text.replace(/：/g, ':');
-						}
-						
-						function saveContent(button) {
-							try {
-								const updateButtonText = (step) => {
-									button.textContent = \`保存中: \${step}\`;
-								};
-								// 检测是否为iOS设备
-								const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
-								
-								// 仅在非iOS设备上执行replaceFullwidthColon
-								if (!isIOS) {
-									replaceFullwidthColon();
-								}
-								updateButtonText('开始保存');
-								button.disabled = true;
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>${FileName} | foxai</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@keeex/qrcodejs-kx@1.0.2/qrcode.min.js"></script>
+<style>
+:root {
+	--bg-deep: #060a13;
+	--bg-surface: #0c1222;
+	--bg-card: rgba(12, 22, 45, 0.75);
+	--bg-card-hover: rgba(18, 32, 60, 0.85);
+	--accent: #00e5ff;
+	--accent-dim: rgba(0, 229, 255, 0.15);
+	--accent-warm: #ff6b35;
+	--accent-green: #00e676;
+	--accent-purple: #6366f1;
+	--text: #d8e2f3;
+	--text-bright: #f0f4ff;
+	--text-muted: #4a5a78;
+	--border: rgba(0, 229, 255, 0.1);
+	--border-active: rgba(0, 229, 255, 0.4);
+	--radius: 12px;
+	--font-display: 'Orbitron', sans-serif;
+	--font-mono: 'JetBrains Mono', monospace;
+}
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+	background: var(--bg-deep);
+	color: var(--text);
+	font-family: var(--font-mono);
+	font-size: 13px;
+	line-height: 1.6;
+	min-height: 100vh;
+	overflow-x: hidden;
+	position: relative;
+}
+/* Animated grid background */
+.bg-grid {
+	position: fixed; inset: 0;
+	background-image:
+		linear-gradient(rgba(0,229,255,0.04) 1px, transparent 1px),
+		linear-gradient(90deg, rgba(0,229,255,0.04) 1px, transparent 1px);
+	background-size: 50px 50px;
+	animation: gridMove 25s linear infinite;
+	z-index: 0;
+	pointer-events: none;
+}
+@keyframes gridMove {
+	0% { transform: translate(0, 0); }
+	100% { transform: translate(50px, 50px); }
+}
+/* Glow orbs */
+.glow-orb {
+	position: fixed;
+	border-radius: 50%;
+	filter: blur(80px);
+	opacity: 0.3;
+	z-index: 0;
+	pointer-events: none;
+	animation: orbFloat 12s ease-in-out infinite;
+}
+.orb-1 {
+	width: 400px; height: 400px;
+	background: radial-gradient(circle, var(--accent) 0%, transparent 70%);
+	top: -100px; right: -100px;
+}
+.orb-2 {
+	width: 350px; height: 350px;
+	background: radial-gradient(circle, var(--accent-purple) 0%, transparent 70%);
+	bottom: -80px; left: -80px;
+	animation-delay: -6s;
+}
+@keyframes orbFloat {
+	0%, 100% { transform: translate(0, 0) scale(1); }
+	50% { transform: translate(30px, -20px) scale(1.1); }
+}
+/* Container */
+.container {
+	position: relative;
+	z-index: 1;
+	max-width: 860px;
+	margin: 0 auto;
+	padding: 20px 16px 40px;
+}
+/* Header */
+.header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 24px 0 32px;
+	border-bottom: 1px solid var(--border);
+	margin-bottom: 32px;
+}
+.logo-area {
+	display: flex;
+	align-items: center;
+	gap: 16px;
+}
+.fox-logo {
+	width: 48px;
+	height: 44px;
+	flex-shrink: 0;
+	filter: drop-shadow(0 0 12px rgba(0, 229, 255, 0.4));
+}
+.brand {
+	font-family: var(--font-display);
+	font-weight: 900;
+	font-size: 22px;
+	letter-spacing: 3px;
+	background: linear-gradient(135deg, var(--accent), var(--accent-purple), var(--accent-warm));
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+	background-clip: text;
+	text-transform: uppercase;
+}
+.subtitle {
+	font-size: 11px;
+	color: var(--text-muted);
+	letter-spacing: 1px;
+	margin-top: 2px;
+}
+.status-badge {
+	font-size: 10px;
+	padding: 4px 12px;
+	border-radius: 20px;
+	border: 1px solid var(--accent-dim);
+	color: var(--accent);
+	font-family: var(--font-display);
+	letter-spacing: 1px;
+	text-transform: uppercase;
+}
+/* Section */
+.section {
+	margin-bottom: 28px;
+}
+.section-title {
+	font-family: var(--font-display);
+	font-size: 13px;
+	font-weight: 700;
+	letter-spacing: 2px;
+	text-transform: uppercase;
+	color: var(--text-bright);
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	margin-bottom: 6px;
+}
+.title-accent {
+	display: inline-block;
+	width: 3px;
+	height: 16px;
+	background: linear-gradient(180deg, var(--accent), var(--accent-purple));
+	border-radius: 2px;
+}
+.section-desc {
+	font-size: 11px;
+	color: var(--text-muted);
+	margin-bottom: 16px;
+	padding-left: 15px;
+}
+/* Card grid */
+.card-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+	gap: 12px;
+}
+.sub-card {
+	background: var(--bg-card);
+	border: 1px solid var(--border);
+	border-radius: var(--radius);
+	padding: 16px;
+	transition: all 0.3s ease;
+	position: relative;
+	overflow: hidden;
+	animation: cardIn 0.5s ease both;
+}
+.sub-card::before {
+	content: '';
+	position: absolute;
+	inset: 0;
+	border-radius: var(--radius);
+	padding: 1px;
+	background: linear-gradient(135deg, transparent 40%, var(--accent-dim) 100%);
+	-webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+	-webkit-mask-composite: xor;
+	mask-composite: exclude;
+	pointer-events: none;
+	opacity: 0;
+	transition: opacity 0.3s;
+}
+.sub-card:hover {
+	background: var(--bg-card-hover);
+	border-color: var(--border-active);
+	transform: translateY(-2px);
+	box-shadow: 0 8px 32px rgba(0, 229, 255, 0.08);
+}
+.sub-card:hover::before { opacity: 1; }
+@keyframes cardIn {
+	from { opacity: 0; transform: translateY(16px); }
+	to { opacity: 1; transform: translateY(0); }
+}
+.card-badge {
+	display: inline-block;
+	font-family: var(--font-display);
+	font-size: 9px;
+	font-weight: 700;
+	letter-spacing: 1.5px;
+	text-transform: uppercase;
+	color: var(--accent);
+	background: var(--accent-dim);
+	padding: 2px 8px;
+	border-radius: 4px;
+	margin-bottom: 8px;
+}
+.card-label {
+	font-size: 12px;
+	color: var(--text-muted);
+	margin-bottom: 8px;
+}
+.card-link {
+	display: block;
+	font-size: 11px;
+	color: var(--text-bright);
+	text-decoration: none;
+	word-break: break-all;
+	cursor: pointer;
+	padding: 6px 8px;
+	background: rgba(0,0,0,0.25);
+	border-radius: 6px;
+	border: 1px solid rgba(255,255,255,0.04);
+	transition: all 0.2s;
+}
+.card-link:hover {
+	background: rgba(0,229,255,0.06);
+	border-color: var(--accent-dim);
+	color: var(--accent);
+}
+.qr-wrap {
+	margin-top: 10px;
+	display: flex;
+	justify-content: center;
+	min-height: 0;
+}
+.qr-wrap img, .qr-wrap canvas {
+	border-radius: 6px !important;
+}
+/* Toggle bar */
+.toggle-bar {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 14px 18px;
+	margin: 24px 0;
+	background: var(--bg-card);
+	border: 1px solid var(--border);
+	border-radius: var(--radius);
+	cursor: pointer;
+	transition: all 0.3s;
+	color: var(--text);
+	font-size: 12px;
+	font-weight: 500;
+}
+.toggle-bar:hover {
+	border-color: var(--border-active);
+	background: var(--bg-card-hover);
+}
+.toggle-arrow {
+	color: var(--accent);
+	font-size: 14px;
+	transition: transform 0.3s;
+}
+.toggle-bar.active .toggle-arrow {
+	transform: rotate(180deg);
+}
+/* Guest section */
+.guest-info {
+	background: rgba(99, 102, 241, 0.08);
+	border: 1px solid rgba(99, 102, 241, 0.15);
+	border-radius: var(--radius);
+	padding: 12px 16px;
+	margin: 12px 0;
+	font-size: 12px;
+	color: var(--text-muted);
+}
+.guest-info strong {
+	color: var(--accent-purple);
+}
+.guest-section .card-grid {
+	margin-top: 12px;
+}
+/* Config section */
+.config-section {
+	background: var(--bg-card);
+	border: 1px solid var(--border);
+	border-radius: var(--radius);
+	padding: 16px 20px;
+	margin: 24px 0;
+}
+.config-row {
+	display: flex;
+	align-items: baseline;
+	gap: 12px;
+	padding: 6px 0;
+	font-size: 11px;
+}
+.config-row + .config-row {
+	border-top: 1px solid rgba(255,255,255,0.03);
+	padding-top: 10px;
+	margin-top: 4px;
+}
+.config-key {
+	font-family: var(--font-display);
+	font-size: 9px;
+	font-weight: 700;
+	letter-spacing: 1.5px;
+	color: var(--accent);
+	text-transform: uppercase;
+	min-width: 80px;
+	flex-shrink: 0;
+}
+.config-val {
+	color: var(--text-muted);
+	word-break: break-all;
+	font-size: 11px;
+}
+/* Editor */
+.editor {
+	width: 100%;
+	min-height: 260px;
+	background: rgba(0, 0, 0, 0.4);
+	border: 1px solid var(--border);
+	border-radius: var(--radius);
+	color: var(--text);
+	font-family: var(--font-mono);
+	font-size: 12px;
+	line-height: 1.7;
+	padding: 16px;
+	resize: vertical;
+	transition: border-color 0.3s, box-shadow 0.3s;
+}
+.editor:focus {
+	outline: none;
+	border-color: var(--accent);
+	box-shadow: 0 0 0 3px rgba(0, 229, 255, 0.08), inset 0 0 30px rgba(0, 229, 255, 0.02);
+}
+.editor::placeholder { color: var(--text-muted); opacity: 0.5; }
+.editor-bar {
+	display: flex;
+	align-items: center;
+	gap: 14px;
+	margin-top: 10px;
+}
+.save-btn {
+	font-family: var(--font-display);
+	font-size: 11px;
+	font-weight: 700;
+	letter-spacing: 1.5px;
+	text-transform: uppercase;
+	padding: 10px 28px;
+	background: linear-gradient(135deg, var(--accent-green), #00c853);
+	color: #060a13;
+	border: none;
+	border-radius: 8px;
+	cursor: pointer;
+	transition: all 0.3s;
+}
+.save-btn:hover {
+	transform: translateY(-1px);
+	box-shadow: 0 4px 20px rgba(0, 230, 118, 0.25);
+}
+.save-btn:active { transform: translateY(0); }
+.save-btn:disabled {
+	opacity: 0.6;
+	cursor: not-allowed;
+	transform: none;
+	box-shadow: none;
+}
+.save-status {
+	font-size: 11px;
+	color: var(--text-muted);
+}
+.no-kv {
+	color: var(--accent-warm);
+	padding: 20px;
+	text-align: center;
+	border: 1px dashed rgba(255, 107, 53, 0.3);
+	border-radius: var(--radius);
+}
+/* Footer */
+.footer {
+	margin-top: 40px;
+	padding-top: 20px;
+	border-top: 1px solid var(--border);
+	text-align: center;
+	font-size: 11px;
+	color: var(--text-muted);
+	line-height: 2;
+}
+.footer a {
+	color: var(--accent);
+	text-decoration: none;
+	transition: color 0.2s;
+}
+.footer a:hover { color: var(--text-bright); text-decoration: underline; }
+.footer .divider {
+	display: inline-block;
+	width: 40px;
+	text-align: center;
+	opacity: 0.3;
+}
+.ua-line {
+	margin-top: 16px;
+	font-size: 10px;
+	color: var(--text-muted);
+	opacity: 0.5;
+	word-break: break-all;
+}
+/* Responsive */
+@media (max-width: 560px) {
+	.card-grid {
+		grid-template-columns: 1fr;
+	}
+	.header {
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 12px;
+	}
+	.config-row {
+		flex-direction: column;
+		gap: 4px;
+	}
+}
+</style>
+</head>
+<body>
+<div class="bg-grid"></div>
+<div class="glow-orb orb-1"></div>
+<div class="glow-orb orb-2"></div>
+<div class="container">
+	<header class="header">
+		<div class="logo-area">
+			<svg class="fox-logo" viewBox="0 0 40 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+				<defs>
+					<linearGradient id="foxGrad" x1="0" y1="0" x2="40" y2="36" gradientUnits="userSpaceOnUse">
+						<stop offset="0%" stop-color="#00e5ff"/>
+						<stop offset="55%" stop-color="#6366f1"/>
+						<stop offset="100%" stop-color="#ff6b35"/>
+					</linearGradient>
+				</defs>
+				<path d="M2 34L14 2L20 20Z" fill="url(#foxGrad)"/>
+				<path d="M38 34L26 2L20 20Z" fill="url(#foxGrad)"/>
+				<path d="M8 28L20 14L32 28L26 34L20 30L14 34Z" fill="url(#foxGrad)"/>
+			</svg>
+			<div>
+				<div class="brand">foxai</div>
+				<div class="subtitle">${FileName}</div>
+			</div>
+		</div>
+		<div class="status-badge">Online</div>
+	</header>
 
-								// 获取textarea内容和原始内容
-								const textarea = document.getElementById('content');
-								if (!textarea) {
-									throw new Error('找不到文本编辑区域');
-								}
+	<section class="section">
+		<h2 class="section-title"><span class="title-accent"></span>Subscribe</h2>
+		<p class="section-desc">点击链接复制订阅地址并生成二维码</p>
+		<div class="card-grid">
+			<div class="sub-card" style="animation-delay:0.05s">
+				<div class="card-badge">Auto</div>
+				<div class="card-label">自适应订阅</div>
+				<a href="javascript:void(0)" onclick="copyToClipboard('https://${url.hostname}/${mytoken}?sub','qrcode_0')" class="card-link">https://${url.hostname}/${mytoken}</a>
+				<div id="qrcode_0" class="qr-wrap"></div>
+			</div>
+			<div class="sub-card" style="animation-delay:0.1s">
+				<div class="card-badge">Base64</div>
+				<div class="card-label">Base64订阅</div>
+				<a href="javascript:void(0)" onclick="copyToClipboard('https://${url.hostname}/${mytoken}?b64','qrcode_1')" class="card-link">https://${url.hostname}/${mytoken}?b64</a>
+				<div id="qrcode_1" class="qr-wrap"></div>
+			</div>
+			<div class="sub-card" style="animation-delay:0.15s">
+				<div class="card-badge">Clash</div>
+				<div class="card-label">Clash订阅</div>
+				<a href="javascript:void(0)" onclick="copyToClipboard('https://${url.hostname}/${mytoken}?clash','qrcode_2')" class="card-link">https://${url.hostname}/${mytoken}?clash</a>
+				<div id="qrcode_2" class="qr-wrap"></div>
+			</div>
+			<div class="sub-card" style="animation-delay:0.2s">
+				<div class="card-badge">Singbox</div>
+				<div class="card-label">Singbox订阅</div>
+				<a href="javascript:void(0)" onclick="copyToClipboard('https://${url.hostname}/${mytoken}?sb','qrcode_3')" class="card-link">https://${url.hostname}/${mytoken}?sb</a>
+				<div id="qrcode_3" class="qr-wrap"></div>
+			</div>
+			<div class="sub-card" style="animation-delay:0.25s">
+				<div class="card-badge">Surge</div>
+				<div class="card-label">Surge订阅</div>
+				<a href="javascript:void(0)" onclick="copyToClipboard('https://${url.hostname}/${mytoken}?surge','qrcode_4')" class="card-link">https://${url.hostname}/${mytoken}?surge</a>
+				<div id="qrcode_4" class="qr-wrap"></div>
+			</div>
+			<div class="sub-card" style="animation-delay:0.3s">
+				<div class="card-badge">Loon</div>
+				<div class="card-label">Loon订阅</div>
+				<a href="javascript:void(0)" onclick="copyToClipboard('https://${url.hostname}/${mytoken}?loon','qrcode_5')" class="card-link">https://${url.hostname}/${mytoken}?loon</a>
+				<div id="qrcode_5" class="qr-wrap"></div>
+			</div>
+		</div>
+	</section>
 
-								updateButtonText('获取内容');
-								let newContent;
-								let originalContent;
-								try {
-									newContent = textarea.value || '';
-									originalContent = textarea.defaultValue || '';
-								} catch (e) {
-									console.error('获取内容错误:', e);
-									throw new Error('无法获取编辑内容');
-								}
+	<div class="toggle-bar" id="guestToggle" onclick="toggleNotice()">
+		<span id="noticeToggle">Guest Subscribe / 访客订阅</span>
+		<span class="toggle-arrow">&#9662;</span>
+	</div>
+	<div id="noticeContent" style="display:none;">
+		<div class="guest-info">
+			访客订阅仅可使用订阅功能，无法查看配置页 &mdash; GUEST TOKEN: <strong>${guest}</strong>
+		</div>
+		<div class="card-grid guest-section">
+			<div class="sub-card">
+				<div class="card-badge">Auto</div>
+				<div class="card-label">自适应</div>
+				<a href="javascript:void(0)" onclick="copyToClipboard('https://${url.hostname}/sub?token=${guest}','guest_0')" class="card-link">https://${url.hostname}/sub?token=${guest}</a>
+				<div id="guest_0" class="qr-wrap"></div>
+			</div>
+			<div class="sub-card">
+				<div class="card-badge">Base64</div>
+				<div class="card-label">Base64</div>
+				<a href="javascript:void(0)" onclick="copyToClipboard('https://${url.hostname}/sub?token=${guest}&b64','guest_1')" class="card-link">https://${url.hostname}/sub?token=${guest}&b64</a>
+				<div id="guest_1" class="qr-wrap"></div>
+			</div>
+			<div class="sub-card">
+				<div class="card-badge">Clash</div>
+				<div class="card-label">Clash</div>
+				<a href="javascript:void(0)" onclick="copyToClipboard('https://${url.hostname}/sub?token=${guest}&clash','guest_2')" class="card-link">https://${url.hostname}/sub?token=${guest}&clash</a>
+				<div id="guest_2" class="qr-wrap"></div>
+			</div>
+			<div class="sub-card">
+				<div class="card-badge">Singbox</div>
+				<div class="card-label">Singbox</div>
+				<a href="javascript:void(0)" onclick="copyToClipboard('https://${url.hostname}/sub?token=${guest}&sb','guest_3')" class="card-link">https://${url.hostname}/sub?token=${guest}&sb</a>
+				<div id="guest_3" class="qr-wrap"></div>
+			</div>
+			<div class="sub-card">
+				<div class="card-badge">Surge</div>
+				<div class="card-label">Surge</div>
+				<a href="javascript:void(0)" onclick="copyToClipboard('https://${url.hostname}/sub?token=${guest}&surge','guest_4')" class="card-link">https://${url.hostname}/sub?token=${guest}&surge</a>
+				<div id="guest_4" class="qr-wrap"></div>
+			</div>
+			<div class="sub-card">
+				<div class="card-badge">Loon</div>
+				<div class="card-label">Loon</div>
+				<a href="javascript:void(0)" onclick="copyToClipboard('https://${url.hostname}/sub?token=${guest}&loon','guest_5')" class="card-link">https://${url.hostname}/sub?token=${guest}&loon</a>
+				<div id="guest_5" class="qr-wrap"></div>
+			</div>
+		</div>
+	</div>
 
-								updateButtonText('准备状态更新函数');
-								const updateStatus = (message, isError = false) => {
-									const statusElem = document.getElementById('saveStatus');
-									if (statusElem) {
-										statusElem.textContent = message;
-										statusElem.style.color = isError ? 'red' : '#666';
-									}
-								};
+	<section class="config-section">
+		<div class="config-row">
+			<span class="config-key">SubAPI</span>
+			<span class="config-val">${subProtocol}://${subConverter}</span>
+		</div>
+		<div class="config-row">
+			<span class="config-key">SubConfig</span>
+			<span class="config-val">${subConfig}</span>
+		</div>
+	</section>
 
-								updateButtonText('准备按钮重置函数');
-								const resetButton = () => {
-									button.textContent = '保存';
-									button.disabled = false;
-								};
+	<section class="section">
+		<h2 class="section-title"><span class="title-accent"></span>Editor</h2>
+		<p class="section-desc">编辑节点链接与订阅地址，每行一个</p>
+		${hasKV ? `
+		<textarea id="content" class="editor"
+			placeholder="${decodeURIComponent(atob('TElOSyVFNyVBNCVCQSVFNCVCRSU4QiVFRiVCQyU4OCVFNCVCOCU4MCVFOCVBMSU4QyVFNCVCOCU4MCVFNCVCOCVBQSVFOCU4QSU4MiVFNyU4MiVCOSVFOSU5MyVCRSVFNiU4RSVBNSVFNSU4RCVCMyVFNSU4RiVBRiVFRiVCQyU4OSVFRiVCQyU5QQp2bGVzcyUzQSUyRiUyRjI0NmFhNzk1LTA2MzctNGY0Yy04ZjY0LTJjOGZiMjRjMWJhZCU0MDEyNy4wLjAuMSUzQTEyMzQlM0ZlbmNyeXB0aW9uJTNEbm9uZSUyNnNlY3VyaXR5JTNEdGxzJTI2c25pJTNEVEcuQ01MaXVzc3NzLmxvc2V5b3VyaXAuY29tJTI2YWxsb3dJbnNlY3VyZSUzRDElMjZ0eXBlJTNEd3MlMjZob3N0JTNEVEcuQ01MaXVzc3NzLmxvc2V5b3VyaXAuY29tJTI2cGF0aCUzRCUyNTJGJTI1M0ZlZCUyNTNEMjU2MCUyM0NGbmF0CnRyb2phbiUzQSUyRiUyRmFhNmRkZDJmLWQxY2YtNGE1Mi1iYTFiLTI2NDBjNDFhNzg1NiU0MDIxOC4xOTAuMjMwLjIwNyUzQTQxMjg4JTNGc2VjdXJpdHklM0R0bHMlMjZzbmklM0RoazEyLmJpbGliaWxpLmNvbSUyNmFsbG93SW5zZWN1cmUlM0QxJTI2dHlwZSUzRHRjcCUyNmhlYWRlclR5cGUlM0Rub25lJTIzSEsKc3MlM0ElMkYlMkZZMmhoWTJoaE1qQXRhV1YwWmkxd2IyeDVNVE13TlRveVJYUlFjVzQyU0ZscVZVNWpTRzlvVEdaVmNFWlJkMjVtYWtORFVUVnRhREZ0U21SRlRVTkNkV04xVjFvNVVERjFaR3RTUzBodVZuaDFielUxYXpGTFdIb3lSbTgyYW5KbmRERTRWelkyYjNCMGVURmxOR0p0TVdwNlprTm1RbUklMjUzRCU0MDg0LjE5LjMxLjYzJTNBNTA4NDElMjNERQoKCiVFOCVBRSVBMiVFOSU5OCU4NSVFOSU5MyVCRSVFNiU4RSVBNSVFNyVBNCVCQSVFNCVCRSU4QiVFRiVCQyU4OCVFNCVCOCU4MCVFOCVBMSU4QyVFNCVCOCU4MCVFNiU5RCVBMSVFOCVBRSVBMiVFOSU5OCU4NSVFOSU5MyVCRSVFNiU4RSVBNSVFNSU4RCVCMyVFNSU4RiVBRiVFRiVCQyU4OSVFRiVCQyU5QQpodHRwcyUzQSUyRiUyRnN1Yi54Zi5mcmVlLmhyJTJGYXV0bw=='))}">${content}</textarea>
+		<div class="editor-bar">
+			<button class="save-btn" onclick="saveContent(this)">Save</button>
+			<span id="saveStatus" class="save-status"></span>
+		</div>
+		` : '<p class="no-kv">请绑定 KV 命名空间以启用编辑功能</p>'}
+	</section>
 
-								if (newContent !== originalContent) {
-									updateButtonText('发送保存请求');
-									fetch(window.location.href, {
-										method: 'POST',
-										body: newContent,
-										headers: {
-											'Content-Type': 'text/plain;charset=UTF-8'
-										},
-										cache: 'no-cache'
-									})
-									.then(response => {
-										updateButtonText('检查响应状态');
-										if (!response.ok) {
-											throw new Error(\`HTTP error! status: \${response.status}\`);
-										}
-										updateButtonText('更新保存状态');
-										const now = new Date().toLocaleString();
-										document.title = \`编辑已保存 \${now}\`;
-										updateStatus(\`已保存 \${now}\`);
-									})
-									.catch(error => {
-										updateButtonText('处理错误');
-										console.error('Save error:', error);
-										updateStatus(\`保存失败: \${error.message}\`, true);
-									})
-									.finally(() => {
-										resetButton();
-									});
-								} else {
-									updateButtonText('检查内容变化');
-									updateStatus('内容未变化');
-									resetButton();
-								}
-							} catch (error) {
-								console.error('保存过程出错:', error);
-								button.textContent = '保存';
-								button.disabled = false;
-								const statusElem = document.getElementById('saveStatus');
-								if (statusElem) {
-									statusElem.textContent = \`错误: \${error.message}\`;
-									statusElem.style.color = 'red';
-								}
-							}
-						}
-		
-						textarea.addEventListener('blur', saveContent);
-						textarea.addEventListener('input', () => {
-							clearTimeout(timer);
-							timer = setTimeout(saveContent, 5000);
-						});
-					}
+	<footer class="footer">
+		${decodeURIComponent(atob('dGVsZWdyYW0lMjAlRTQlQkElQTQlRTYlQjUlODElRTclQkUlQTQlMjAlRTYlOEElODAlRTYlOUMlQUYlRTUlQTQlQTclRTQlQkQlQUMlN0UlRTUlOUMlQTglRTclQkElQkYlRTUlOEYlOTElRTclODklOEMhJTNDYnIlM0UKJTNDYSUyMGhyZWYlM0QlMjdodHRwcyUzQSUyRiUyRnQubWUlMkZDTUxpdXNzc3MlMjclM0VodHRwcyUzQSUyRiUyRnQubWUlMkZDTUxpdXNzc3MlM0MlMkZhJTNFJTNDYnIlM0UKLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tJTNDYnIlM0UKZ2l0aHViJTIwJUU5JUExJUI5JUU3JTlCJUFFJUU1JTlDJUIwJUU1JTlEJTgwJTIwU3RhciFTdGFyIVN0YXIhISElM0NiciUzRQolM0NhJTIwaHJlZiUzRCUyN2h0dHBzJTNBJTJGJTJGZ2l0aHViLmNvbSUyRmNtbGl1JTJGQ0YtV29ya2Vycy1TVUIlMjclM0VodHRwcyUzQSUyRiUyRmdpdGh1Yi5jb20lMkZjbWxpdSUyRkNGLVdvcmtlcnMtU1VCJTNDJTJGYSUzRSUzQ2JyJTNFCi0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLSUzQ2JyJTNFCiUyMyUyMyUyMyUyMyUyMyUyMyUyMyUyMyUyMyUyMyUyMyUyMyUyMyUyMyUyMyUyMyUyMyUyMyUyMyUyMyUyMyUyMyUyMyUyMyUyMyUyMyUyMyUyMyUyMyUyMyUyMyUyMyUyMyUyMyUyMyUyMyUyMyUyMyUyMyUyMyUyMyUyMyUyMyUyMyUyMyUyMyUyMyUyMyUyMyUyMyUyMyUyMyUyMyUyMyUyMyUyMyUyMyUyMyUyMyUyMyUyMyUyMyUyMyUyMw=='))}
+		<div class="ua-line">UA: ${request.headers.get('User-Agent')}</div>
+	</footer>
+</div>
 
-					function toggleNotice() {
-						const noticeContent = document.getElementById('noticeContent');
-						const noticeToggle = document.getElementById('noticeToggle');
-						if (noticeContent.style.display === 'none' || noticeContent.style.display === '') {
-							noticeContent.style.display = 'block';
-							noticeToggle.textContent = '隐藏访客订阅∧';
-						} else {
-							noticeContent.style.display = 'none';
-							noticeToggle.textContent = '查看访客订阅∨';
-						}
-					}
-			
-					// 初始化 noticeContent 的 display 属性
-					document.addEventListener('DOMContentLoaded', () => {
-						document.getElementById('noticeContent').style.display = 'none';
-					});
-					</script>
-				</body>
-			</html>
+<script>
+function copyToClipboard(text, qrcode) {
+	navigator.clipboard.writeText(text).then(() => {
+		showToast('已复制到剪贴板');
+	}).catch(err => {
+		console.error('复制失败:', err);
+	});
+	const qrcodeDiv = document.getElementById(qrcode);
+	qrcodeDiv.innerHTML = '';
+	new QRCode(qrcodeDiv, {
+		text: text,
+		width: 160,
+		height: 160,
+		colorDark: "#e0e8ff",
+		colorLight: "#0c1222",
+		correctLevel: QRCode.CorrectLevel.M,
+		scale: 1
+	});
+}
+
+function showToast(msg) {
+	let t = document.createElement('div');
+	t.textContent = msg;
+	Object.assign(t.style, {
+		position:'fixed', bottom:'24px', left:'50%', transform:'translateX(-50%)',
+		background:'linear-gradient(135deg, #00e5ff, #6366f1)', color:'#060a13',
+		padding:'10px 24px', borderRadius:'8px', fontSize:'12px', fontWeight:'600',
+		fontFamily:"'JetBrains Mono', monospace", zIndex:'9999',
+		boxShadow:'0 4px 20px rgba(0,229,255,0.3)', animation:'toastIn 0.3s ease'
+	});
+	document.body.appendChild(t);
+	setTimeout(() => { t.style.opacity = '0'; t.style.transition = 'opacity 0.3s'; }, 1800);
+	setTimeout(() => t.remove(), 2200);
+}
+
+if (document.querySelector('.editor')) {
+	let timer;
+	const textarea = document.getElementById('content');
+	const originalContent = textarea.value;
+
+	function replaceFullwidthColon() {
+		const text = textarea.value;
+		textarea.value = text.replace(/\uff1a/g, ':');
+	}
+
+	function saveContent(button) {
+		try {
+			const updateButtonText = (step) => {
+				button.textContent = \`Saving... \${step}\`;
+			};
+			const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+			if (!isIOS) replaceFullwidthColon();
+			updateButtonText('...');
+			button.disabled = true;
+
+			const textarea = document.getElementById('content');
+			if (!textarea) throw new Error('textarea not found');
+
+			let newContent, originalContent;
+			try {
+				newContent = textarea.value || '';
+				originalContent = textarea.defaultValue || '';
+			} catch (e) {
+				throw new Error('cannot read editor');
+			}
+
+			const updateStatus = (message, isError = false) => {
+				const el = document.getElementById('saveStatus');
+				if (el) {
+					el.textContent = message;
+					el.style.color = isError ? '#ff6b6b' : '#00e676';
+				}
+			};
+			const resetButton = () => {
+				button.textContent = 'Save';
+				button.disabled = false;
+			};
+
+			if (newContent !== originalContent) {
+				fetch(window.location.href, {
+					method: 'POST',
+					body: newContent,
+					headers: { 'Content-Type': 'text/plain;charset=UTF-8' },
+					cache: 'no-cache'
+				})
+				.then(response => {
+					if (!response.ok) throw new Error(\`HTTP \${response.status}\`);
+					const now = new Date().toLocaleString();
+					document.title = \`${FileName} saved \${now}\`;
+					updateStatus(\`saved \${now}\`);
+				})
+				.catch(error => {
+					console.error('Save error:', error);
+					updateStatus(\`failed: \${error.message}\`, true);
+				})
+				.finally(() => resetButton());
+			} else {
+				updateStatus('no changes');
+				resetButton();
+			}
+		} catch (error) {
+			button.textContent = 'Save';
+			button.disabled = false;
+			const el = document.getElementById('saveStatus');
+			if (el) { el.textContent = \`error: \${error.message}\`; el.style.color = '#ff6b6b'; }
+		}
+	}
+
+	textarea.addEventListener('blur', saveContent);
+	textarea.addEventListener('input', () => {
+		clearTimeout(timer);
+		timer = setTimeout(saveContent, 5000);
+	});
+}
+
+function toggleNotice() {
+	const nc = document.getElementById('noticeContent');
+	const nt = document.getElementById('noticeToggle');
+	const tb = document.getElementById('guestToggle');
+	if (nc.style.display === 'none' || nc.style.display === '') {
+		nc.style.display = 'block';
+		nt.textContent = 'Guest Subscribe / 访客订阅';
+		tb.classList.add('active');
+	} else {
+		nc.style.display = 'none';
+		nt.textContent = 'Guest Subscribe / 访客订阅';
+		tb.classList.remove('active');
+	}
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+	document.getElementById('noticeContent').style.display = 'none';
+});
+</script>
+</body>
+</html>
 		`;
 
 		return new Response(html, {
