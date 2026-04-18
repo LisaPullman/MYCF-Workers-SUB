@@ -538,20 +538,20 @@ async function KV(request, env, txt = 'ADD.txt', guest) {
 <script src="https://cdn.jsdelivr.net/npm/@keeex/qrcodejs-kx@1.0.2/qrcode.min.js"></script>
 <style>
 :root {
-	--bg-deep: #060a13;
-	--bg-surface: #0c1222;
-	--bg-card: rgba(12, 22, 45, 0.75);
-	--bg-card-hover: rgba(18, 32, 60, 0.85);
-	--accent: #00e5ff;
-	--accent-dim: rgba(0, 229, 255, 0.15);
-	--accent-warm: #ff6b35;
-	--accent-green: #00e676;
+	--bg-deep: #f0f4fa;
+	--bg-surface: #ffffff;
+	--bg-card: rgba(255, 255, 255, 0.92);
+	--bg-card-hover: rgba(255, 255, 255, 0.98);
+	--accent: #0891b2;
+	--accent-dim: rgba(8, 145, 178, 0.1);
+	--accent-warm: #e85d2a;
+	--accent-green: #059669;
 	--accent-purple: #6366f1;
-	--text: #d8e2f3;
-	--text-bright: #f0f4ff;
-	--text-muted: #4a5a78;
-	--border: rgba(0, 229, 255, 0.1);
-	--border-active: rgba(0, 229, 255, 0.4);
+	--text: #1e293b;
+	--text-bright: #0f172a;
+	--text-muted: #94a3b8;
+	--border: rgba(8, 145, 178, 0.12);
+	--border-active: rgba(8, 145, 178, 0.35);
 	--radius: 12px;
 	--font-display: 'Orbitron', sans-serif;
 	--font-mono: 'JetBrains Mono', monospace;
@@ -572,8 +572,8 @@ body {
 .bg-grid {
 	position: fixed; inset: 0;
 	background-image:
-		linear-gradient(rgba(0,229,255,0.04) 1px, transparent 1px),
-		linear-gradient(90deg, rgba(0,229,255,0.04) 1px, transparent 1px);
+		linear-gradient(rgba(8,145,178,0.06) 1px, transparent 1px),
+		linear-gradient(90deg, rgba(8,145,178,0.06) 1px, transparent 1px);
 	background-size: 50px 50px;
 	animation: gridMove 25s linear infinite;
 	z-index: 0;
@@ -588,7 +588,7 @@ body {
 	position: fixed;
 	border-radius: 50%;
 	filter: blur(80px);
-	opacity: 0.3;
+	opacity: 0.12;
 	z-index: 0;
 	pointer-events: none;
 	animation: orbFloat 12s ease-in-out infinite;
@@ -634,7 +634,7 @@ body {
 	width: 48px;
 	height: 44px;
 	flex-shrink: 0;
-	filter: drop-shadow(0 0 12px rgba(0, 229, 255, 0.4));
+	filter: drop-shadow(0 0 8px rgba(8, 145, 178, 0.3));
 }
 .brand {
 	font-family: var(--font-display);
@@ -726,7 +726,7 @@ body {
 	background: var(--bg-card-hover);
 	border-color: var(--border-active);
 	transform: translateY(-2px);
-	box-shadow: 0 8px 32px rgba(0, 229, 255, 0.08);
+	box-shadow: 0 8px 32px rgba(8, 145, 178, 0.08);
 }
 .sub-card:hover::before { opacity: 1; }
 @keyframes cardIn {
@@ -759,13 +759,13 @@ body {
 	word-break: break-all;
 	cursor: pointer;
 	padding: 6px 8px;
-	background: rgba(0,0,0,0.25);
+	background: rgba(241, 245, 249, 0.7);
 	border-radius: 6px;
-	border: 1px solid rgba(255,255,255,0.04);
+	border: 1px solid rgba(0,0,0,0.06);
 	transition: all 0.2s;
 }
 .card-link:hover {
-	background: rgba(0,229,255,0.06);
+	background: rgba(8, 145, 178, 0.06);
 	border-color: var(--accent-dim);
 	color: var(--accent);
 }
@@ -838,7 +838,7 @@ body {
 	font-size: 11px;
 }
 .config-row + .config-row {
-	border-top: 1px solid rgba(255,255,255,0.03);
+	border-top: 1px solid rgba(0,0,0,0.05);
 	padding-top: 10px;
 	margin-top: 4px;
 }
@@ -861,7 +861,7 @@ body {
 .editor {
 	width: 100%;
 	min-height: 260px;
-	background: rgba(0, 0, 0, 0.4);
+	background: rgba(241, 245, 249, 0.8);
 	border: 1px solid var(--border);
 	border-radius: var(--radius);
 	color: var(--text);
@@ -875,7 +875,7 @@ body {
 .editor:focus {
 	outline: none;
 	border-color: var(--accent);
-	box-shadow: 0 0 0 3px rgba(0, 229, 255, 0.08), inset 0 0 30px rgba(0, 229, 255, 0.02);
+	box-shadow: 0 0 0 3px rgba(8, 145, 178, 0.1), inset 0 0 20px rgba(8, 145, 178, 0.03);
 }
 .editor::placeholder { color: var(--text-muted); opacity: 0.5; }
 .editor-bar {
@@ -892,7 +892,7 @@ body {
 	text-transform: uppercase;
 	padding: 10px 28px;
 	background: linear-gradient(135deg, var(--accent-green), #00c853);
-	color: #060a13;
+	color: #ffffff;
 	border: none;
 	border-radius: 8px;
 	cursor: pointer;
@@ -900,7 +900,7 @@ body {
 }
 .save-btn:hover {
 	transform: translateY(-1px);
-	box-shadow: 0 4px 20px rgba(0, 230, 118, 0.25);
+	box-shadow: 0 4px 20px rgba(5, 150, 105, 0.2);
 }
 .save-btn:active { transform: translateY(0); }
 .save-btn:disabled {
@@ -917,7 +917,7 @@ body {
 	color: var(--accent-warm);
 	padding: 20px;
 	text-align: center;
-	border: 1px dashed rgba(255, 107, 53, 0.3);
+	border: 1px dashed rgba(232, 93, 42, 0.3);
 	border-radius: var(--radius);
 }
 /* Footer */
@@ -940,7 +940,7 @@ body {
 	display: inline-block;
 	width: 40px;
 	text-align: center;
-	opacity: 0.3;
+	opacity: 0.12;
 }
 .ua-line {
 	margin-top: 16px;
@@ -1109,7 +1109,6 @@ body {
 	</section>
 
 	<footer class="footer">
-		${decodeURIComponent(atob('Z2l0aHViJTIwJUU5JUExJUI5JUU3JTlCJUFFJUU1JTlDJUIwJUU1JTlEJTgwJTIwU3RhciFTdGFyIVN0YXIhISElM0NiciUzRSUwQSUzQ2ElMjBocmVmJTNEJ2h0dHBzJTNBJTJGJTJGZ2l0aHViLmNvbSUyRkxpc2FQdWxsbWFuJTJGTVlDRi1Xb3JrZXJzLVNVQiclM0VodHRwcyUzQSUyRiUyRmdpdGh1Yi5jb20lMkZMaXNhUHVsbG1hbiUyRk1ZQ0YtV29ya2Vycy1TVUIlM0MlMkZhJTNFJTNDYnIlM0UlMEEtLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0lM0NiciUzRSUwQXRlbGVncmFtJTIwJUU0JUJBJUE0JUU2JUI1JTgxJUU3JUJFJUE0JTIwJTNDYnIlM0UlMEElM0NhJTIwaHJlZiUzRCdodHRwcyUzQSUyRiUyRnQubWUlMkZDTUxpdXNzc3MnJTNFaHR0cHMlM0ElMkYlMkZ0Lm1lJTJGQ01MaXVzc3NzJTNDJTJGYSUzRSUzQ2JyJTNFJTBBLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tJTNDYnIlM0UlMEElMjMlMjMlMjMlMjMlMjMlMjMlMjMlMjMlMjMlMjMlMjMlMjMlMjMlMjMlMjMlMjMlMjMlMjMlMjMlMjMlMjMlMjMlMjMlMjMlMjMlMjMlMjMlMjMlMjMlMjMlMjMlMjMlMjMlMjMlMjMlMjMlMjMlMjMlMjMlMjMlMjMlMjMlMjMlMjMlMjMlMjMlMjMlMjMlMjMlMjMlMjMlMjMlMjMlMjMlMjMlMjMlMjMlMjMlMjMlMjMlMjMlMjMlMjMlMjM='))}
 		<div class="ua-line">UA: ${request.headers.get('User-Agent')}</div>
 	</footer>
 </div>
@@ -1127,8 +1126,8 @@ function copyToClipboard(text, qrcode) {
 		text: text,
 		width: 160,
 		height: 160,
-		colorDark: "#e0e8ff",
-		colorLight: "#0c1222",
+		colorDark: "#1e293b",
+		colorLight: "#ffffff",
 		correctLevel: QRCode.CorrectLevel.M,
 		scale: 1
 	});
@@ -1139,10 +1138,10 @@ function showToast(msg) {
 	t.textContent = msg;
 	Object.assign(t.style, {
 		position:'fixed', bottom:'24px', left:'50%', transform:'translateX(-50%)',
-		background:'linear-gradient(135deg, #00e5ff, #6366f1)', color:'#060a13',
+		background:'linear-gradient(135deg, #0891b2, #6366f1)', color:'#ffffff',
 		padding:'10px 24px', borderRadius:'8px', fontSize:'12px', fontWeight:'600',
 		fontFamily:"'JetBrains Mono', monospace", zIndex:'9999',
-		boxShadow:'0 4px 20px rgba(0,229,255,0.3)', animation:'toastIn 0.3s ease'
+		boxShadow:'0 4px 20px rgba(8,145,178,0.3)', animation:'toastIn 0.3s ease'
 	});
 	document.body.appendChild(t);
 	setTimeout(() => { t.style.opacity = '0'; t.style.transition = 'opacity 0.3s'; }, 1800);
